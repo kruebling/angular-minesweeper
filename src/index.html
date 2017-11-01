@@ -28,6 +28,12 @@
 
       function MinesweeperController($scope) {
         $scope.minefield = createMinefield();
+        $scope.uncoverSpot = function(spot) {
+          spot.isCovered = false;
+          if(hasWon($scope.minefield)) {
+            $scope.isWinMessageVisible = true;
+          }
+        };
       }
 
       function placeRandomMine(minefield) {
@@ -127,13 +133,28 @@
           }
         }
       }
+
+      function hasWon(minefield) {
+        for(var y = 0; y < 9; y++) {
+          for(var x = 0; x < 9; x++) {
+            var spot = getSpot(minefield, y, x);
+            if(spot.isCovered && spot.content != "mine") {
+                return false;
+            }
+          }
+        }
+        return true;
+      }
+
+
     </script>
   </head>
   <body>
+    <h3 ng-if="isWinMessageVisible">You won!</h3>
     <div ng-controller="MinesweeperController">
       <table border="1" class="minefield">
         <tr ng-repeat="row in minefield.rows">
-          <td ng-repeat="spot in row.spots" ng-click="spot.isCovered = false" >
+          <td ng-repeat="spot in row.spots" ng-click="uncoverSpot(spot)" >
             <img ng-if="spot.isCovered" src="/assets/images/covered.png">
             <img ng-if="!spot.isCovered && spot.content == 'empty'" src="/assets/images/empty.png">
             <img ng-if="!spot.isCovered && spot.content == 'mine'" src="/assets/images/mine.png">
