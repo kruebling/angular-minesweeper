@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+.minefield {
+    line-height:0;
+    border-spacing:0;
+}
+
+.minefield td {
+    padding:0
+}
