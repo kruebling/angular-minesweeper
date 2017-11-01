@@ -4,38 +4,129 @@
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
     <script>
       function createMinefield() {
-        var minefield = {};
+        let minefield = {};
         minefield.rows = [];
-        for(var i = 0; i < 9; i++) {
-          var row = {};
+        for(let i = 0; i < 9; i++) {
+          let row = {};
           row.spots = [];
-          for(var j = 0; j < 9; j++) {
-            var spot = {};
+          for(let j = 0; j < 9; j++) {
+            let spot = {};
             spot.isCovered = true;
             spot.content = "empty";
             row.spots.push(spot);
           }
           minefield.rows.push(row);
         }
-        placeRandomMine(minefield);
+        placeManyRandomMines(minefield);
+        calculateAllNumbers(minefield);
         return minefield;
       }
 
       function getSpot(minefield, row, column) {
         return minefield.rows[row].spots[column];
       }
-      
+
       function MinesweeperController($scope) {
         $scope.minefield = createMinefield();
       }
 
       function placeRandomMine(minefield) {
-        var row = Math.round(Math.random() * 8);
-        var column = Math.round(Math.random() * 8);
-        var spot = getSpot(minefield, row, column);
+        let row = Math.round(Math.random() * 8);
+        let column = Math.round(Math.random() * 8);
+        let spot = getSpot(minefield, row, column);
         spot.content = "mine";
       }
 
+      function placeManyRandomMines(minefield) {
+        for(let i = 0; i <= 10; i++) {
+          placeRandomMine(minefield);
+        }
+      }
+
+      function calculateNumber(minefield, row, column) {
+        let thisSpot = getSpot(minefield, row, column);
+
+        // if this spot contains a mine then we can't place a number here
+        if(thisSpot.content == "mine") {
+          return;
+        }
+        let mineCount = 0;
+        // check row above if this is not the first row
+        if(row > 0) {
+          // check column to the left if this is not the first column
+          if(column > 0) {
+            // get the spot above and to the left
+            let spot = getSpot(minefield, row - 1, column - 1);
+            if(spot.content == "mine") {
+              mineCount++;
+            }
+          }
+          // get the spot right above
+          let spot = getSpot(minefield, row - 1, column);
+          if(spot.content == "mine") {
+            mineCount++;
+          }
+          // check column to the right if this is not the last column
+          if(column < 8) {
+            // get the spot above and to the right
+            let spot = getSpot(minefield, row - 1, column + 1);
+            if(spot.content == "mine") {
+              mineCount++;
+            }
+          }
+        }
+        // check column to the left if this is not the first column
+        if(column > 0) {
+          // get the spot to the left
+          let spot = getSpot(minefield, row, column - 1);
+          if(spot.content == "mine") {
+            mineCount++;
+          }
+        }
+        // check column to the right if this is not the last column
+        if(column < 8) {
+          // get the spot to the right
+          let spot = getSpot(minefield, row, column + 1);
+          if(spot.content == "mine") {
+            mineCount++;
+          }
+        }
+        // check row below if this is not the last row
+        if(row < 8) {
+          // check column to the left if this is not the first column
+          if(column > 0) {
+            // get the spot below and to the left
+            let spot = getSpot(minefield, row + 1, column - 1);
+            if(spot.content == "mine") {
+              mineCount++;
+            }
+          }
+          // get the spot right below
+          let spot = getSpot(minefield, row + 1, column);
+          if(spot.content == "mine") {
+            mineCount++;
+          }
+          // check column to the right if this is not the last column
+          if(column < 8) {
+            // get the spot below and to the right
+            let spot = getSpot(minefield, row + 1, column + 1);
+            if(spot.content == "mine") {
+              mineCount++;
+            }
+          }
+        }
+        if(mineCount > 0) {
+          thisSpot.content = mineCount;
+        }
+      }
+
+      function calculateAllNumbers(minefield) {
+        for(var y = 0; y < 9; y++) {
+          for(var x = 0; x < 9; x++) {
+            calculateNumber(minefield, x, y);
+          }
+        }
+      }
     </script>
   </head>
   <body>
@@ -46,6 +137,14 @@
             <img ng-if="spot.isCovered" src="/assets/images/covered.png">
             <img ng-if="!spot.isCovered && spot.content == 'empty'" src="/assets/images/empty.png">
             <img ng-if="!spot.isCovered && spot.content == 'mine'" src="/assets/images/mine.png">
+            <img ng-if="!spot.isCovered && spot.content == 1" src="/assets/images/number-1.png">
+            <img ng-if="!spot.isCovered && spot.content == 2" src="/assets/images/number-2.png">
+            <img ng-if="!spot.isCovered && spot.content == 3" src="/assets/images/number-3.png">
+            <img ng-if="!spot.isCovered && spot.content == 4" src="/assets/images/number-4.png">
+            <img ng-if="!spot.isCovered && spot.content == 5" src="/assets/images/number-5.png">
+            <img ng-if="!spot.isCovered && spot.content == 6" src="/assets/images/number-6.png">
+            <img ng-if="!spot.isCovered && spot.content == 7" src="/assets/images/number-7.png">
+            <img ng-if="!spot.isCovered && spot.content == 8" src="/assets/images/number-8.png">
           </td>
         </tr>
       </table>
