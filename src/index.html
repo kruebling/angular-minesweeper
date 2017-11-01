@@ -27,10 +27,9 @@
     <div ng-controller="MinesweeperController">
       <table border="1" class="minefield">
         <tr ng-repeat="row in minefield.rows">
-          <td ng-repeat="spot in row.spots" ng-click="spot.isCovered = false">
-            <img ng-if="spot.isCovered" src="covered.png">
-            <img ng-if="!spot.isCovered" src="empty.png">
-            {{spot.isCovered}}
+          <td ng-repeat="spot in row.spots" ng-click="spot.isCovered = false" >
+            <img ng-if="spot.isCovered" src="/assets/images/covered.png">
+            <img ng-if="!spot.isCovered" src="/assets/images/empty.png">
           </td>
         </tr>
       </table>
