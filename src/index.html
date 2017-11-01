@@ -12,24 +12,40 @@
           for(var j = 0; j < 9; j++) {
             var spot = {};
             spot.isCovered = true;
+            spot.content = "empty";
             row.spots.push(spot);
           }
           minefield.rows.push(row);
         }
+        placeRandomMine(minefield);
         return minefield;
       }
+
+      function getSpot(minefield, row, column) {
+        return minefield.rows[row].spots[column];
+      }
+      
       function MinesweeperController($scope) {
         $scope.minefield = createMinefield();
       }
+
+      function placeRandomMine(minefield) {
+        var row = Math.round(Math.random() * 8);
+        var column = Math.round(Math.random() * 8);
+        var spot = getSpot(minefield, row, column);
+        spot.content = "mine";
+      }
+
     </script>
   </head>
-  <body ng-controller="MinesweeperController">
+  <body>
     <div ng-controller="MinesweeperController">
       <table border="1" class="minefield">
         <tr ng-repeat="row in minefield.rows">
           <td ng-repeat="spot in row.spots" ng-click="spot.isCovered = false" >
             <img ng-if="spot.isCovered" src="/assets/images/covered.png">
-            <img ng-if="!spot.isCovered" src="/assets/images/empty.png">
+            <img ng-if="!spot.isCovered && spot.content == 'empty'" src="/assets/images/empty.png">
+            <img ng-if="!spot.isCovered && spot.content == 'mine'" src="/assets/images/mine.png">
           </td>
         </tr>
       </table>
