@@ -1,14 +1,37 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>AngularSweeper</title>
-  <base href="/">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-</head>
-<body>
-  <app-root>Loading...</app-root>
-</body>
+<!DOCTYPE html>
+<html ng-app>
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
+    <script>
+      function createMinefield() {
+        var minefield = {};
+        minefield.rows = [];
+        for(var i = 0; i < 9; i++) {
+          var row = {};
+          row.spots = [];
+          for(var j = 0; j < 9; j++) {
+            var spot = {};
+            spot.isCovered = true;
+            row.spots.push(spot);
+          }
+          minefield.rows.push(row);
+        }
+        return minefield;
+      }
+      function MinesweeperController($scope) {
+        $scope.minefield = createMinefield();
+      }
+    </script>
+  </head>
+  <body ng-controller="MinesweeperController">
+    <div ng-controller="MinesweeperController">
+      <table border="1">
+        <tr ng-repeat="row in minefield.rows">
+          <td ng-repeat="spot in row.spots">
+            {{spot.isCovered}}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
 </html>
